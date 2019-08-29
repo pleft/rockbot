@@ -15,12 +15,13 @@ QT       -= gui
 #CONFIG += raspberry
 #CONFIG += android
 #CONFIG += win32
-CONFIG += playstation2
+#CONFIG += playstation2
 #CONFIG += dingux
 #CONFIG += open_pandora
 #CONFIG += wii
 #CONFIG += dreamcast
 #CONFIG += macosx
+CONFIG += gameshell
 
 # -m64 problem in android build:
 # NOTE for android build on 64: /usr/share/qt4/mkspecs/default/qmake.conf
@@ -75,6 +76,19 @@ raspberry {
         QMAKE_CCFLAGS += -DRASPBERRY -DPC -Wno-reorder -Wno-ignored-qualifiers -fpermissive
         QMAKE_CXXFLAGS += -DRASPBERRY -DPC -Wno-reorder -Wno-ignored-qualifiers -fpermissive
 }
+
+gameshell {
+        DEFINES+= GAMESHELL=1
+	LIBS = -L/usr/X11R6/lib -lX11 -lSDL_mixer -lSDL_image -lSDL_ttf -lSDL_gfx `sdl-config --libs` -ldl
+
+	INCLUDES = -I/usr/include/SDL \
+	         -I/usr/include \
+	         -I. \
+	         -I./include \
+	         -L/usr/lib
+	QMAKE_CCFLAGS += -DGAMESHELL -DHANDHELD -Wno-reorder -Wno-ignored-qualifiers -fpermissive
+	QMAKE_CXXFLAGS += -DGAMESHELL -DHANDHELD -Wno-reorder -Wno-ignored-qualifiers -fpermissive
+													}
 
 macosx {
         LIBS = -framework Cocoa -L/Library/Frameworks -F/Library/Frameworks -framework SDL -framework SDL_mixer -framework SDL_image -framework SDL_ttf -framework SDL_gfx
